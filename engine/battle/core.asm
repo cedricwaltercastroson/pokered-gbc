@@ -822,8 +822,10 @@ FaintEnemyPokemon:
 	call SaveScreenTilesToBuffer1
 	xor a
 	ld [wBattleResult], a
-	ld b, EXP_ALL
-	push af
+;	ld b, EXP_ALL
+;	call IsItemInBag
+;	push af
+;	jr z, .giveExpToMonsThatFought ; if no exp all, then jump
 
 ; the player has exp all
 ; first, we halve the values that determine exp gain
@@ -839,12 +841,12 @@ FaintEnemyPokemon:
 
 ; give exp (divided evenly) to the mons that actually fought in battle against the enemy mon that has fainted
 ; if exp all is in the bag, this will be only be half of the stat exp and normal exp, due to the above loop
-.giveExpToMonsThatFought
-	xor a
-	ld [wBoostExpByExpAll], a
-	callfar GainExperience
-	pop af
-	ret z ; return if no exp all
+;.giveExpToMonsThatFought
+;	xor a
+;	ld [wBoostExpByExpAll], a
+;	callfar GainExperience
+;	pop af
+;	ret z ; return if no exp all
 
 ; the player has exp all
 ; now, set the gain exp flag for every party member
