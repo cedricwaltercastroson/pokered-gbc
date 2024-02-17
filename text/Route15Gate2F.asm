@@ -1,14 +1,9 @@
 _Route15Gate2FOaksAideExpAllText::
-	text "EXP gives"
-	line "points to all"
-	cont "the #MON with"
-	cont "you, even if they"
+	text "All the #MON"
+	line "in your party"
+	cont "receive exp points, "
+	cont "even if they"
 	cont "don't fight."
-
-	para "It is, however,"
-	line "retroactive"
-	cont "of EXP for each"
-	cont "#MON."
 	done
 
 _Route15Gate2FBinocularsText::
