@@ -156,6 +156,7 @@ GainExperience:
 	jr nz, .skipExpText
 	ld hl, GainedText
 	call PrintText
+.skipExpText
 	xor a ; PLAYER_PARTY_DATA
 	ld [wMonDataLocation], a
 IF GEN_2_GRAPHICS
