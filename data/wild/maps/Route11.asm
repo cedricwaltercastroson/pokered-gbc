@@ -1,11 +1,11 @@
 Route11WildMons:
 	def_grass_wildmons 15 ; encounter rate
 IF DEF(_RED)
-	db 14, EKANS
+	db 14, SANDSHREW
 	db 15, SPEAROW
-	db 12, EKANS
+	db 12, SPEAROW
 	db  9, DROWZEE
-	db 13, SPEAROW
+	db 13, SANDSHREW
 	db 13, DROWZEE
 	db 15, EKANS
 ENDC

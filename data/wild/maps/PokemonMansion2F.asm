@@ -3,8 +3,8 @@ PokemonMansion2FWildMons:
 IF DEF(_RED)
 	db 32, GROWLITHE
 	db 34, KOFFING
-	db 34, KOFFING
-	db 30, PONYTA
+	db  5, CHARMANDER
+	db 30, MAGMAR
 	db 30, KOFFING
 	db 32, PONYTA
 	db 30, GRIMER
