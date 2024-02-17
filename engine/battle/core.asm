@@ -823,9 +823,7 @@ FaintEnemyPokemon:
 	xor a
 	ld [wBattleResult], a
 	ld b, EXP_ALL
-	call IsItemInBag
 	push af
-	jr z, .giveExpToMonsThatFought ; if no exp all, then jump
 
 ; the player has exp all
 ; first, we halve the values that determine exp gain
