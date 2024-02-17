@@ -2,8 +2,8 @@ _Route15Gate2FOaksAideExpAllText::
 	text "All the #MON"
 	line "in your party"
 	cont "receive exp points, "
-	cont "even if they"
-	cont "don't fight."
+	cont "even if only"
+	cont "one fought."
 	done
 
 _Route15Gate2FBinocularsText::
