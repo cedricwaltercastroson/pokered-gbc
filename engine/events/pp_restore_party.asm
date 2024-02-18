@@ -13,7 +13,6 @@ PPRestore:
     ld hl, wPartyMon1Status - wPartyMon1HP
     add hl, de
     xor a
-    ;ld [hl], a ; Clearing status, comment out if you don't want this
 
     push de
     ld b, NUM_MOVES ; A Pokémon has 4 moves
