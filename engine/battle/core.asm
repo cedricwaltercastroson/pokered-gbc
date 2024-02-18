@@ -800,6 +800,7 @@ FaintEnemyPokemon:
 	call EndLowHealthAlarm
 	ld a, MUSIC_DEFEATED_WILD_MON
 	call PlayBattleVictoryMusic
+	predef PPRestore
 .sfxplayed
 ; bug: win sfx is played for wild battles before checking for player mon HP
 ; this can lead to odd scenarios where both player and enemy faint, as the win sfx plays yet the player never won the battle
@@ -833,24 +834,9 @@ FaintEnemyPokemon:
 ; the base exp (which determines normal exp) is also halved
 	ld hl, wEnemyMonBaseStats
 	ld b, NUM_STATS + 2
-;.halveExpDataLoop
-;	srl [hl]
-;	inc hl
-;	dec b
-;	jr nz, .halveExpDataLoop
-
-; give exp (divided evenly) to the mons that actually fought in battle against the enemy mon that has fainted
-; if exp all is in the bag, this will be only be half of the stat exp and normal exp, due to the above loop
-;.giveExpToMonsThatFought
-;	xor a
-;	ld [wBoostExpByExpAll], a
-;	callfar GainExperience
-;	pop af
-;	ret z ; return if no exp all
 
 ; the player has exp all
 ; now, set the gain exp flag for every party member
-; half of the total stat exp and normal exp will divided evenly amongst every party member
 	ld a, $1
 	ld [wBoostExpByExpAll], a
 	ld a, [wPartyCount]
@@ -953,6 +939,7 @@ TrainerBattleVictory:
 	ld de, wPlayerMoney + 2
 	ld hl, wAmountMoneyWon + 2
 	ld c, $3
+	predef PPRestore
 	predef_jump AddBCDPredef
 
 MoneyForWinningText:
