@@ -5,9 +5,9 @@ This is a disassembly of Pokémon Red and Blue.
 To set up the repository, see [**INSTALL.md**](INSTALL.md).
 
 QOL:
-EXP.ALL is always on and distributes 100% of the EXP value.
-150 Pokemon catchable in a single rom.
-Added the ability to automatically restore only PP moves after battle.
+- EXP.ALL is always on and distributes 100% of the EXP value.
+- 150 Pokemon catchable in a single rom.
+- Added the ability to automatically restore only PP moves after battle.
 
 ## See also
 
