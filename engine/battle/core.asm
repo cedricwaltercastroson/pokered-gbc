@@ -933,13 +933,13 @@ TrainerBattleVictory:
 	ld c, 40
 	call DelayFrames
 	call PrintEndBattleText
+	predef PPRestore
 ; win money
 	ld hl, MoneyForWinningText
 	call PrintText
 	ld de, wPlayerMoney + 2
 	ld hl, wAmountMoneyWon + 2
 	ld c, $3
-	predef PPRestore
 	predef_jump AddBCDPredef
 
 MoneyForWinningText:
