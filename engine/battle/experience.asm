@@ -112,8 +112,8 @@ GainExperience:
 	ld b, 0
 	ld hl, wPartySpecies
 	add hl, bc
-	ld a, [hl] ; species
-	ld [wd0b5], a
+	ld a, [hl]
+	ld [wCurSpecies], a
 	call GetMonHeader
 	ld d, MAX_LEVEL
 	callfar CalcExperience ; get max exp
@@ -166,18 +166,18 @@ ENDC
 IF GEN_2_GRAPHICS
 	call KeepEXPBarFull
 ELSE
-	ld a, [wCurEnemyLVL]
+	ld a, [wCurEnemyLevel]
 ENDC
 	push af
 	push hl
 	ld a, d
-	ld [wCurEnemyLVL], a
+	ld [wCurEnemyLevel], a
 	ld [hl], a
 	ld bc, wPartyMon1Species - wPartyMon1Level
 	add hl, bc
-	ld a, [hl] ; species
-	ld [wd0b5], a
-	ld [wd11e], a
+	ld a, [hl]
+	ld [wCurSpecies], a
+	ld [wPokedexNum], a
 	call GetMonHeader
 	ld bc, (wPartyMon1MaxHP + 1) - wPartyMon1Species
 	add hl, bc
@@ -231,7 +231,7 @@ ENDC
 	call CopyData
 	pop hl
 	ld a, [wPlayerBattleStatus3]
-	bit 3, a ; is the mon transformed?
+	bit TRANSFORMED, a
 	jr nz, .recalcStatChanges
 ; the mon is not transformed, so update the unmodified stats
 	ld de, wPlayerMonUnmodifiedLevel
@@ -262,8 +262,8 @@ ENDC
 	call LoadScreenTilesFromBuffer1
 	xor a ; PLAYER_PARTY_DATA
 	ld [wMonDataLocation], a
-	ld a, [wd0b5]
-	ld [wd11e], a
+	ld a, [wCurSpecies]
+	ld [wPokedexNum], a
 	predef LearnMoveFromLevelUp
 	ld hl, wCanEvolveFlags
 	ld a, [wWhichPokemon]
@@ -272,7 +272,7 @@ ENDC
 	predef FlagActionPredef
 	pop hl
 	pop af
-	ld [wCurEnemyLVL], a
+	ld [wCurEnemyLevel], a
 
 .nextMon
 	ld a, [wPartyCount]
