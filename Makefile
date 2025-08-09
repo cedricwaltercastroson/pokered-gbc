@@ -17,9 +17,7 @@ rom_obj := \
 pokered_obj    := $(rom_obj:.o=_red.o)
 pokered_vc_obj := $(rom_obj:.o=_red_vc.o)
 
-
 ### Build tools
-
 ifeq (,$(shell command -v sha1sum 2>/dev/null))
 SHA1 := shasum
 else
@@ -32,9 +30,7 @@ RGBFIX  ?= $(RGBDS)rgbfix
 RGBGFX  ?= $(RGBDS)rgbgfx
 RGBLINK ?= $(RGBDS)rgblink
 
-
 ### Build targets
-
 .SUFFIXES:
 .SECONDEXPANSION:
 .PRECIOUS:
@@ -72,7 +68,6 @@ compare: $(roms) $(patches)
 tools:
 	$(MAKE) -C tools/
 
-
 RGBASMFLAGS = -Q8 -P includes.asm -Weverything -Wtruncation=1
 ifeq ($(DEBUG),1)
 RGBASMFLAGS += -E
@@ -89,12 +84,14 @@ rgbdscheck.o: rgbdscheck.asm
 
 ifeq (,$(filter clean tidy tools,$(MAKECMDGOALS)))
 $(info $(shell $(MAKE) -C tools))
+
 preinclude_deps := includes.asm $(shell tools/scan_includes includes.asm)
 define DEP
 $1: $2 $$(shell tools/scan_includes $2) $(preinclude_deps) | rgbdscheck.o
 	$$(RGBASM) $$(RGBASMFLAGS) -o $$@ $$<
 endef
-$(foreach obj, $(pokered_obj),    $(eval $(call DEP,$(obj),$(obj:_red.o=.asm))))
+
+$(foreach obj, $(pokered_obj), $(eval $(call DEP,$(obj),$(obj:_red.o=.asm))))
 $(foreach obj, $(pokered_vc_obj), $(eval $(call DEP,$(obj),$(obj:_red_vc.o=.asm))))
 endif
 
@@ -110,22 +107,29 @@ pokered_vc_opt = -Cjv -n 0 -k 01 -l 0x33 -m MBC3+RAM+BATTERY -r 03 -t "POKEMON R
 	$(RGBLINK) -p $($*_pad) -d -m $*.map -n $*.sym -l layout.link -o $@ $(filter %.o,$^)
 	$(RGBFIX) -p $($*_pad) $($*_opt) $@
 
-
 ### Misc file-specific graphics rules
 
 gfx/battle/move_anim_0.2bpp: tools/gfx += --trim-whitespace
 gfx/battle/move_anim_1.2bpp: tools/gfx += --trim-whitespace
 
+gfx/intro/blue_jigglypuff_1.2bpp: rgbgfx += --columns
+gfx/intro/blue_jigglypuff_2.2bpp: rgbgfx += --columns
+gfx/intro/blue_jigglypuff_3.2bpp: rgbgfx += --columns
+gfx/intro/red_nidorino_1.2bpp: rgbgfx += --columns
+gfx/intro/red_nidorino_2.2bpp: rgbgfx += --columns
+gfx/intro/red_nidorino_3.2bpp: rgbgfx += --columns
 gfx/intro/gengar.2bpp: rgbgfx += --columns
 gfx/intro/gengar.2bpp: tools/gfx += --remove-duplicates --preserve=0x19,0x76
 
 gfx/credits/the_end.2bpp: tools/gfx += --interleave --png=$<
 
+gfx/slots/red_slots_1.2bpp: tools/gfx += --trim-whitespace
+gfx/slots/blue_slots_1.2bpp: tools/gfx += --trim-whitespace
+
 gfx/tilesets/%.2bpp: tools/gfx += --trim-whitespace
 gfx/tilesets/reds_house.2bpp: tools/gfx += --preserve=0x48
 
 gfx/trade/game_boy.2bpp: tools/gfx += --remove-duplicates
-
 
 ### Catch-all graphics rules
 
