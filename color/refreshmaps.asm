@@ -5,7 +5,7 @@
 ; LCD is disabled, so we have free reign over vram.
 LoadMapVramAndColors::
 	ld a, $02
-	ldh [rSVBK], a
+	ldh [rWBK], a
 
 	hlcoord 0, 0
 	ld de, vBGMap0
@@ -30,7 +30,7 @@ LoadMapVramAndColors::
 
 	dec c
 	jr nz, .vramCopyInnerLoop
-	ld a, BG_MAP_WIDTH - SCREEN_WIDTH
+	ld a, TILEMAP_WIDTH - SCREEN_WIDTH
 	add e
 	ld e, a
 	jr nc, .noCarry
@@ -40,7 +40,7 @@ LoadMapVramAndColors::
 	jr nz, .vramCopyLoop
 
 	xor a
-	ldh [rSVBK], a
+	ldh [rWBK], a
 	ret
 
 
@@ -52,7 +52,7 @@ RefreshWindow::
 	ret z
 
 	ld a, 2
-	ldh [rSVBK], a
+	ldh [rWBK], a
 
 	; Check that the pre-vblank functions have run already (if not, let it catch up)
 	ld hl, W2_UpdatedWindowPortion
@@ -189,7 +189,7 @@ ENDR
 .palettesDone
 	xor a
 	ldh [rVBK], a
-	ldh [rSVBK], a
+	ldh [rWBK], a
 	ret
 
 
@@ -201,11 +201,11 @@ ENDR
 WindowTransferBgRowsAndColors::
 	; Store # of rows to ocpy
 	ld a, $02
-	ldh [rSVBK], a
+	ldh [rWBK], a
 	ld a, b
 	ld [W2_VBCOPYBGNUMROWS], a
 	xor a
-	ldh [rSVBK], a
+	ldh [rWBK], a
 
 .nextRow
 	ld c, l
@@ -228,7 +228,7 @@ ENDR
 	ld a, $01
 	ldh [rVBK], a
 	ld a, $02
-	ldh [rSVBK], a
+	ldh [rWBK], a
 
 	ld d, W2_TilesetPaletteMap >> 8
 REPT SCREEN_WIDTH / 2
@@ -254,7 +254,7 @@ ENDR
 
 	ld a, $00 ; Don't xor so we don't change the flags
 	ldh [rVBK], a
-	ldh [rSVBK], a
+	ldh [rWBK], a
 
 	; Jump if W2_VBCOPYBGNUMROWS is nonzero
 	jp nz, .nextRow
@@ -273,7 +273,7 @@ ENDR
 ; Called when scrolling the screen vertically (at vblank)
 DrawMapRow::
 	ld a, 2
-	ldh [rSVBK], a
+	ldh [rWBK], a
 
 	ld a, 1
 	ld [W2_DrewRowOrColumn], a
@@ -286,7 +286,7 @@ DrawMapRow::
 	push de
 	call .drawHalf ; draw upper half
 	pop de
-	ld a, BG_MAP_WIDTH ; width of VRAM background map
+	ld a, TILEMAP_WIDTH ; width of VRAM background map
 	add e
 	ld e, a
 	call .drawHalf ; draw lower half
@@ -303,13 +303,13 @@ DrawMapRow::
 	push de
 	call .drawHalfPalette ; draw upper half
 	pop de
-	ld a, BG_MAP_WIDTH ; width of VRAM background map
+	ld a, TILEMAP_WIDTH ; width of VRAM background map
 	add e
 	ld e, a
 	call .drawHalfPalette ; draw lower half
 
 	xor a
-	ldh [rSVBK], a
+	ldh [rWBK], a
 	ldh [rVBK], a
 	ret
 
@@ -362,7 +362,7 @@ ENDR
 ; Called when scrolling the screen horizontally (at vblank)
 DrawMapColumn::
 	ld a, 2
-	ldh [rSVBK], a
+	ldh [rWBK], a
 
 	ld a, 1
 	ld [W2_DrewRowOrColumn], a
@@ -380,7 +380,7 @@ DrawMapColumn::
 	inc de
 	ld a, [hli]
 	ld [de], a
-	ld a, BG_MAP_WIDTH - 1
+	ld a, TILEMAP_WIDTH - 1
 	add e
 	ld e, a
 	jr nc, .noCarry
@@ -415,7 +415,7 @@ REPT SCREEN_HEIGHT
 	ld c, a
 	ld a, [bc]
 	ld [de], a
-	ld a, BG_MAP_WIDTH - 1
+	ld a, TILEMAP_WIDTH - 1
 	add e
 	ld e, a
 	jr nc, .noCarry\@
@@ -431,5 +431,5 @@ ENDR
 	xor a
 	ldh [hRedrawRowOrColumnMode], a
 	ldh [rVBK], a
-	ldh [rSVBK], a
+	ldh [rWBK], a
 	ret

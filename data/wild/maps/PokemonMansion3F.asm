@@ -3,13 +3,13 @@ PokemonMansion3FWildMons:
 IF DEF(_RED)
 	db 31, KOFFING
 	db 33, GROWLITHE
-	db 5,  CHARMANDER
+	db  5, CHARMANDER
 	db 32, PONYTA
 	db 34, MAGMAR
 	db 40, WEEZING
 	db 34, GRIMER
-	db 38, WEEZING
-	db 36, PONYTA
+	db  5, CHARMANDER
+	db 36, MAGMAR
 	db 42, MUK
 ENDC
 IF DEF(_BLUE)

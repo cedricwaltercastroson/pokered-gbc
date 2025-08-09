@@ -1,14 +1,14 @@
 SafariZoneCenterWildMons:
 	def_grass_wildmons 30 ; encounter rate
 IF DEF(_RED)
-	db 22, PINSIR
+	db 22, NIDORAN_M
 	db 25, RHYHORN
 	db 22, VENONAT
 	db 24, EXEGGCUTE
 	db 31, NIDORINO
-	db 25, EXEGGUTOR
+	db 25, PINSIR
 	db 31, NIDORINA
-	db 30, PARASECT
+	db 30, EXEGGUTOR
 	db 23, SCYTHER
 ENDC
 IF DEF(_BLUE)

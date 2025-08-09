@@ -1,7 +1,7 @@
 ViridianForestWildMons:
 	def_grass_wildmons 8 ; encounter rate
 IF DEF(_RED)
-	db  4, WEEDLE
+	db  5, BULBASAUR
 	db  5, KAKUNA
 	db  3, WEEDLE
 	db  5, WEEDLE
@@ -20,7 +20,7 @@ IF DEF(_BLUE)
 	db  4, KAKUNA
 	db  3, WEEDLE
 ENDC
-	db  3, PIKACHU
+	db  5, PIKACHU
 	db  5, PIKACHU
 	end_grass_wildmons
 
