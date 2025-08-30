@@ -50,9 +50,8 @@ _DexRatingText_Own40To49::
 _DexRatingText_Own50To59::
 	text "You finally got at"
 	line "least 50 species!"
-	cont "Be sure to get"
-	cont "EXP.ALL from my"
-	cont "AIDE!"
+	cont "Be sure to keep"
+	cont "going!"
 	done
 
 _DexRatingText_Own60To69::

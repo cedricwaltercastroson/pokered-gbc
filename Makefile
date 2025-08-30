@@ -1,10 +1,7 @@
 roms := \
-	pokered.gbc \
-	pokeblue.gbc \
-	pokeblue_debug.gbc
+	pokered.gbc
 patches := \
-	pokered.patch \
-	pokeblue.patch
+	pokered.patch
 
 rom_obj := \
 	audio.o \
@@ -17,15 +14,10 @@ rom_obj := \
 	gfx/sprites.o \
 	gfx/tilesets.o
 
-pokered_obj        := $(rom_obj:.o=_red.o)
-pokeblue_obj       := $(rom_obj:.o=_blue.o)
-pokeblue_debug_obj := $(rom_obj:.o=_blue_debug.o)
-pokered_vc_obj     := $(rom_obj:.o=_red_vc.o)
-pokeblue_vc_obj    := $(rom_obj:.o=_blue_vc.o)
-
+pokered_obj    := $(rom_obj:.o=_red.o)
+pokered_vc_obj := $(rom_obj:.o=_red_vc.o)
 
 ### Build tools
-
 ifeq (,$(shell command -v sha1sum 2>/dev/null))
 SHA1 := shasum
 else
@@ -38,21 +30,16 @@ RGBFIX  ?= $(RGBDS)rgbfix
 RGBGFX  ?= $(RGBDS)rgbgfx
 RGBLINK ?= $(RGBDS)rgblink
 
-
 ### Build targets
-
 .SUFFIXES:
 .SECONDEXPANSION:
 .PRECIOUS:
 .SECONDARY:
-.PHONY: all red blue blue_debug clean tidy compare tools
+.PHONY: all red clean tidy compare tools
 
 all: $(roms)
-red:        pokered.gbc
-blue:       pokeblue.gbc
-blue_debug: pokeblue_debug.gbc
-red_vc:     pokered.patch
-blue_vc:    pokeblue.patch
+red: pokered.gbc
+red_vc: pokered.patch
 
 clean: tidy
 	find gfx \
@@ -71,10 +58,7 @@ tidy:
 	      $(patches:.patch=_vc.map) \
 	      $(patches:%.patch=vc/%.constants.sym) \
 	      $(pokered_obj) \
-	      $(pokeblue_obj) \
 	      $(pokered_vc_obj) \
-	      $(pokeblue_vc_obj) \
-	      $(pokeblue_debug_obj) \
 	      rgbdscheck.o
 	$(MAKE) clean -C tools/
 
@@ -84,18 +68,13 @@ compare: $(roms) $(patches)
 tools:
 	$(MAKE) -C tools/
 
-
 RGBASMFLAGS = -Q8 -P includes.asm -Weverything -Wtruncation=1
-# Create a sym/map for debug purposes if `make` run with `DEBUG=1`
 ifeq ($(DEBUG),1)
 RGBASMFLAGS += -E
 endif
 
-$(pokered_obj):        RGBASMFLAGS += -D _RED
-$(pokeblue_obj):       RGBASMFLAGS += -D _BLUE
-$(pokeblue_debug_obj): RGBASMFLAGS += -D _BLUE -D _DEBUG
-$(pokered_vc_obj):     RGBASMFLAGS += -D _RED -D _RED_VC
-$(pokeblue_vc_obj):    RGBASMFLAGS += -D _BLUE -D _BLUE_VC
+$(pokered_obj):    RGBASMFLAGS += -D _RED
+$(pokered_vc_obj): RGBASMFLAGS += -D _RED -D _RED_VC
 
 %.patch: %_vc.gbc %.gbc vc/%.patch.template
 	tools/make_patch $*_vc.sym $^ $@
@@ -103,50 +82,30 @@ $(pokeblue_vc_obj):    RGBASMFLAGS += -D _BLUE -D _BLUE_VC
 rgbdscheck.o: rgbdscheck.asm
 	$(RGBASM) -o $@ $<
 
-# Build tools when building the rom.
-# This has to happen before the rules are processed, since that's when scan_includes is run.
 ifeq (,$(filter clean tidy tools,$(MAKECMDGOALS)))
-
 $(info $(shell $(MAKE) -C tools))
 
-# The dep rules have to be explicit or else missing files won't be reported.
-# As a side effect, they're evaluated immediately instead of when the rule is invoked.
-# It doesn't look like $(shell) can be deferred so there might not be a better way.
 preinclude_deps := includes.asm $(shell tools/scan_includes includes.asm)
 define DEP
 $1: $2 $$(shell tools/scan_includes $2) $(preinclude_deps) | rgbdscheck.o
 	$$(RGBASM) $$(RGBASMFLAGS) -o $$@ $$<
 endef
 
-# Dependencies for objects (drop _red and _blue from asm file basenames)
 $(foreach obj, $(pokered_obj), $(eval $(call DEP,$(obj),$(obj:_red.o=.asm))))
-$(foreach obj, $(pokeblue_obj), $(eval $(call DEP,$(obj),$(obj:_blue.o=.asm))))
-$(foreach obj, $(pokeblue_debug_obj), $(eval $(call DEP,$(obj),$(obj:_blue_debug.o=.asm))))
 $(foreach obj, $(pokered_vc_obj), $(eval $(call DEP,$(obj),$(obj:_red_vc.o=.asm))))
-$(foreach obj, $(pokeblue_vc_obj), $(eval $(call DEP,$(obj),$(obj:_blue_vc.o=.asm))))
-
 endif
-
 
 %.asm: ;
 
+pokered_pad    = 0x00
+pokered_vc_pad = 0x00
 
-pokered_pad        = 0x00
-pokeblue_pad       = 0x00
-pokered_vc_pad     = 0x00
-pokeblue_vc_pad    = 0x00
-pokeblue_debug_pad = 0xff
-
-pokered_opt        = -Cjv -n 0 -k 01 -l 0x33 -m MBC3+RAM+BATTERY -r 03 -t "POKEMON RED"
-pokeblue_opt       = -Cjv -n 0 -k 01 -l 0x33 -m MBC3+RAM+BATTERY -r 03 -t "POKEMON BLUE"
-pokeblue_debug_opt = -Cjv -n 0 -k 01 -l 0x33 -m MBC3+RAM+BATTERY -r 03 -t "POKEMON BLUE"
-pokered_vc_opt     = -Cjv -n 0 -k 01 -l 0x33 -m MBC3+RAM+BATTERY -r 03 -t "POKEMON RED"
-pokeblue_vc_opt    = -Cjv -n 0 -k 01 -l 0x33 -m MBC3+RAM+BATTERY -r 03 -t "POKEMON BLUE"
+pokered_opt    = -Cjv -n 0 -k 01 -l 0x33 -m MBC3+RAM+BATTERY -r 03 -t "POKEMON RED"
+pokered_vc_opt = -Cjv -n 0 -k 01 -l 0x33 -m MBC3+RAM+BATTERY -r 03 -t "POKEMON RED"
 
 %.gbc: $$(%_obj) layout.link
 	$(RGBLINK) -p $($*_pad) -d -m $*.map -n $*.sym -l layout.link -o $@ $(filter %.o,$^)
 	$(RGBFIX) -p $($*_pad) $($*_opt) $@
-
 
 ### Misc file-specific graphics rules
 
@@ -171,7 +130,6 @@ gfx/tilesets/%.2bpp: tools/gfx += --trim-whitespace
 gfx/tilesets/reds_house.2bpp: tools/gfx += --preserve=0x48
 
 gfx/trade/game_boy.2bpp: tools/gfx += --remove-duplicates
-
 
 ### Catch-all graphics rules
 

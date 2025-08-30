@@ -1211,8 +1211,7 @@ _GainedText::
 	text_end
 
 _WithExpAllText::
-	text "with EXP.ALL,"
-	cont "@"
+	text "@"
 	text_end
 
 _BoostedText::

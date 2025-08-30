@@ -5,9 +5,9 @@ IF DEF(_RED)
 	db  8, KAKUNA
 	db 12, PIDGEY
 	db 12, ODDISH
-	db 13, ODDISH
+	db  5, SQUIRTLE
 	db 10, ABRA
-	db 14, ODDISH
+	db  5, SQUIRTLE
 ENDC
 IF DEF(_BLUE)
 	db  7, CATERPIE
